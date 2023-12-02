@@ -6,6 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>AI Blog Generator</title>
+
+    <!-- Custom CSS for Circle Loader -->
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to { 
+                transform: rotate(360deg);
+            }
+        }
+         
+        
+         @-webkit-keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to { 
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        
+        .load {
+            width: 100px;
+            height: 100px;
+            margin: 110px auto 0;
+            border:solid 10px #8822aa;
+            border-radius: 50%;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+             -webkit-transition: all 0.5s ease-in;
+            -webkit-animation-name:             rotate; 
+            -webkit-animation-duration:         1.0s; 
+            -webkit-animation-iteration-count:  infinite;
+            -webkit-animation-timing-function: linear;
+                
+                 transition: all 0.5s ease-in;
+            animation-name:             rotate; 
+            animation-duration:         1.0s; 
+            animation-iteration-count:  infinite;
+            animation-timing-function: linear; 
+        }
+    </style>
 </head>
 <body class = "flex flex-col min-h-screen bg-gray-100 font-sans antialised">
     <!-- Navbar -->
@@ -22,6 +65,7 @@
     <!-- Main Contents  -->
     <div class = "flex-grow container mx-auto mt-10 px-4 sm:px-0">
         <div class = "max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-sm transition-transform transform hover:scale-105 flex flex-col">
+            
             <!-- Intro Section -->
             <div class = "text-center">
                 <h2 class = "text-2xl font-semibold mb-4">Welcome to the AI Blog Generator</h2>
@@ -45,18 +89,20 @@
                 </div>
             </div>
 
+            <!--Circle Loader -->
+            <div style = "display:none;"loading-circle" class = "load"></div>
+
             <!-- Generated Blog Display Button -->
             <section class = "mt-10 flex-grow">
                 <h2 class = "text-xl mb-4 font-semibold">Generated Blog Article:</h2>
-                <div id = "blog-content" class = "mt-2 text-gray-700 space-y-4">
-                    <!-- Section for Circle Loader -->
-                </div>
+                <div id = "blog-content" class = "mt-2 text-gray-700 space-y-4"></div>
             </section>
+             
         </div>
     </div>
 
     <script>
-        
+
     </script>
 </body>
 </html>
