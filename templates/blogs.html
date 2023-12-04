@@ -14,9 +14,11 @@
         <div>
             <h1 class="text-3xl font-bold">AI Blog Generator</h1>
         </div>
-        <div class = "flex items-center">
+        <div class="flex items-center space-x-4">
+            <a href="#" class="text-white hover:underline mx-4">Welcome {{ user.username }}</a>
+            <a href="/blog-list" class="text-white hover:underline mx-4">Saved Blog Posts</a>
             <a href="#" class="text-white hover:underline">Logout</a>
-        </div> 
+        </div>
     </nav>
 
     <!-- Main Contents -->
@@ -26,14 +28,16 @@
             <section>
                 <h2 class = "text-xl mb-4 font-semibold">All Blog Posts</h2>
                 <div class = "space-y-4">
-                    <div class = "border border-gray-300 p-4 rounded">
-                        <h3 class = "text-lg font-semibold ">Blog Post Title #1</h3>
-                        <p>Sample text, loren ipsum........</p>
-                    </div>
-                    <div class="border border-gray-300 p-4 rounded">
-                        <h3 class="text-lg font-semibold ">Blog Post Title #2</h3>
-                        <p>Sample text, loren ipsum........</p>
-                    </div>
+                    <!-- Looping through all blog posts in a reverse order to ensure most recent is at top-->
+                    {% for article in blog_articles reversed %}
+                    <a href = "blog/{{article.id}}">
+                        <div class = "border border-gray-300 p-4 rounded">
+                            <h3 class = "text-lg font-semibold ">{{article.youtube_title}}</h3>
+                            <!-- Truncated Content from Generated Blog Post -->
+                            <p>{{article.generated_content|truncatechars:100}}</p>
+                        </div>
+                    </a>
+                    {% endfor %}
                 </div>
             </section>
 

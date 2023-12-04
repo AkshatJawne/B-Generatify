@@ -6,5 +6,8 @@ urlpatterns = [
     path('login', views.user_login, name="login"),
     path('signup', views.user_signup, name="signup"),
     path('logout', views.user_logout, name="logout"),
-    path('generate_blog', views.generate_blog, name="generate_blog")
+    path('generate_blog', views.generate_blog, name="generate_blog"),
+    path('blog_list', views.blog_list, name="blog_list"),
+    # add unique id to each blog
+    path('blog/<int:pk>/', views.blog_details, name="blog")
 ]

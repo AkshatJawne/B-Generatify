@@ -46,11 +46,11 @@ def generate_blog(request):
         # saving the generated blog post to PostgresSQL database
         new_blog_article = BlogPost.objects.create(
             user=request.user,
-            youtube_title="",
-            youtube_link="",
-            generated_content=""
+            youtube_title=title,
+            youtube_link=yt_link,
+            generated_content=blog_content,
         )
-
+        new_blog_article.save()
         return JsonResponse({"content": blog_content}, status=200)
 
     else:
@@ -58,6 +58,7 @@ def generate_blog(request):
 
 
 def yt_title(link):
+    # creating youtube object from pytube lib to get title
     yt = YouTube(link)
     title = yt.title
     return title
@@ -83,7 +84,6 @@ def get_transcription(link):
     # Create the transcriber
     transcriber = aai.Transcriber()
     transcript = transcriber.transcribe(audio_file)
-
     return transcript.text
 
 
@@ -100,7 +100,6 @@ def generate_blog_from_transcription(transcription):
 
     # return the generated content from OpenAI
     generated_content = response.choices[0].text.strip()
-
     return generated_content
 
 
@@ -108,7 +107,6 @@ def user_login(request):
     if request.method == "POST":
         username = request.POST["username"]
         password = request.POST["password"]
-
         user = authenticate(request, username=username,
                             password=password)  # authenticating user using django's built in authenticate function
 
@@ -117,6 +115,7 @@ def user_login(request):
             login(request, user)
             return redirect('/')
         else:
+            # if user is not authenticated, return an error message
             error_message = "Invalid username or password"
             return render(request, "login.html", {"error_message": error_message})
     return render(request, "login.html")
@@ -124,6 +123,7 @@ def user_login(request):
 
 def user_signup(request):
     if request.method == "POST":
+        # getting information from the request body
         username = request.POST["username"]
         email = request.POST["email"]
         password = request.POST["password"]
@@ -137,9 +137,11 @@ def user_signup(request):
                 login(request, user)
                 return redirect('/')
             except:
+                # if the user cannot be created, return an error message
                 error_message = "Error creating account"
                 return render(request, "signup.html", {"error_message": error_message})
         else:
+            # if the user does not enter identical passwords, return an error message
             error_message = "Passwords do not match"
             return render(request, "signup.html", {"error_message": error_message})
     return render(request, "signup.html")
@@ -148,3 +150,19 @@ def user_signup(request):
 def user_logout(request):
     logout(request)  # logging out user using django's built in logout function
     return redirect('/')
+
+
+def blog_list(request):
+    # getting all blog articles from database for given user
+    blog_articles = BlogPost.objects.filter(user=request.user)
+    return render(request, "blogs.html", {"blog_articles": blog_articles})
+
+
+def blog_details(request, pk):
+    blog_details = BlogPost.objects.get(id=pk)
+    # if the user is the owner of the blog article, render the blog article page
+    if request.user == blog_details.user:
+        return render(request, "blog.html", {"blog": blog_details})
+    # if the user is not the owner of the blog article, redirect them to the blog list page
+    else:
+        return redirect('/')
